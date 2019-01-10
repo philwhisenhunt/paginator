@@ -80,4 +80,3 @@ Apify.main(async () => {
 
     console.log('Crawler finished.');
 });
-

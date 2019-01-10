@@ -5,6 +5,7 @@ Apify.main(async () => {
     const requestQueue = await Apify.openRequestQueue();
     //Puts RVA link in the queue
     await requestQueue.addRequest(new Apify.Request({url: 'https://www.visitrichmondva.com/event/'}));
+    
 
     //makes a new PuppeteerCrawler Object
     const crawler = new Apify.PuppeteerCrawler({
@@ -25,24 +26,24 @@ Apify.main(async () => {
             }
             //
             event.url = request.url;
-            event.name = await page.$eval('div.detailInfo div.inner h1', h1 => h1.innerText);
-            // event.address = await page.$eval('div.detailInfo div.inner ul.info-list li[data-name="address"]', li =>li.innerText);
-            // event.dates = await page.$eval('div.detailInfo div.inner ul.info-list li[data-name="dates"]', li =>li.innerText);
-            // event.reccurence = await page.$eval('div.detailInfo div.inner ul.info-list li[data-name="recur"]', li =>li.innerText);
+            event.name = await page.$eval('div.inner h4', h4 => h4.innerText);
+            
 
             // Find the link to the next page using Puppeteer functions.
-            let nextHref;
-            try {
-                nextHref = await page.$eval('div.listingContainerFoot div.eventPagerBottom div.listFilters div.map-pager div.pagingFilterContainer div.listingPagerContainer a[class="nxt"]', el => el.href);
-            } catch (err) {
-                console.log(`${request.url} is the last page!`);
-                return;
-            }
+            // let nextHref;
+            // try {
+            //     nextHref = await page.$eval('div.listingContainerFoot div.eventPagerBottom div.listFilters div.map-pager div.pagingFilterContainer div.listingPagerContainer a[class="nxt"]', el => el.href);
+            //     // nextHref = await page.$eval('div.listingContainerFoot a[class="nxt"]', el => el.href);
 
-            // Enqueue the link to the RequestQueue
-            await requestQueue.addRequest(new Apify.Request({ url: nextHref }));
+            // } catch (err) {
+            //     console.log(`${request.url} is the last page!`);
+            //     return;
+            // }
+
+            // // Enqueue the link to the RequestQueue
+            // await requestQueue.addRequest(new Apify.Request({ url: nextHref }));
         
-
+          
 
             //target the li with the data-name:address
             

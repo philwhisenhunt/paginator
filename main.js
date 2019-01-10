@@ -49,6 +49,19 @@ Apify.main(async () => {
             
             //add more selectors here
             console.log(event);
+
+              // Find the link to the next page using Puppeteer functions.
+              let nextHref;
+              try {
+                  nextHref = await page.$eval('.nxt', el => el.href);
+                  console.log("The url will now be: " + nextHref)
+              } catch (err) {
+                  console.log(`${request.url} is the last page!`);
+                  return;
+              }
+  
+              // Enqueue the link to the RequestQueue
+              await requestQueue.addRequest(new Apify.Request({ url: nextHref }));
         },
         
 

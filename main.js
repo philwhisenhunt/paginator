@@ -10,6 +10,7 @@ Apify.main(async () => {
     //makes a new PuppeteerCrawler Object
     const crawler = new Apify.PuppeteerCrawler({
         requestQueue,
+        maxRequestsPerCrawl: 2,
 
         handlePageFunction: async ({ page, request }) => {
             let event = {
@@ -24,6 +25,30 @@ Apify.main(async () => {
                 price: null,
                 website: null,
             }
+
+            //trying out a forEach here
+
+              // A function to be evaluated by Puppeteer within the browser context.
+              const pageFunction = ($posts) => {
+                const data = [];
+
+                // We're trying to get the title of each event on the main page.
+                $posts.forEach(($post) => {
+                    data.push({
+                        title: $post.querySelector('div.inner h4').innerText,
+                      
+                    });
+                });
+                console.log("First: " + data);
+
+                return data;
+            };
+            const data = await page.$$eval('div.inner h4', pageFunction);
+            console.log("Second: " + data);
+
+            await Apify.pushData(data);
+
+
 
             //add a forEach here?
             event.url = request.url;
